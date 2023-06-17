@@ -1,5 +1,5 @@
 var arrResult = [];
-var arrDemSoNguyen = [];
+var arrCountInteger = [];
 
 document.getElementById("btnAddNum").onclick = function(){
     var inputNum = document.getElementById("inputNum").value * 1;
@@ -33,7 +33,7 @@ document.getElementById('btnCountNum').onclick = function(){
 // Tim so nho nhat
 
 document.getElementById('btnFindMinNum').onclick = function(){
-    var minNum = myArray.reduce((a, b) => {
+    var minNum = arrResult.reduce((a, b) => {
         return Math.min(a, b);
     });
     document.getElementById('minNum').innerHTML = minNum;
@@ -41,113 +41,101 @@ document.getElementById('btnFindMinNum').onclick = function(){
 
 // Tim so duong nho nhat
 
-document.getElementById('txtSoDuongNhoNhat').onclick = function(){
-    var soDuongNhoNhat = 0;
-    for (var i = 0; i < arrResult.length; i++) {
-        var e = arrResult[i];
-        if(e > 0 && e < soDuongNhoNhat) {
-            soDuongNhoNhat = e;
+document.getElementById('btnFindPositiveMin').onclick = function(){
+    var minPositive = null;
+    arrResult.forEach(elm => {
+        if(elm > 0 && (minPositive == null || elm < minPositive)) {
+            minPositive = elm
         }
-    }
-    document.getElementById('soDuongNhoNhat').innerHTML =  soDuongNhoNhat;
+    })
+    document.getElementById('minPositive').innerHTML =  minPositive;
 }
-
 
 // Tim so chan cuoi cung
 
-document.getElementById('txtSoChanCuoiCung').onclick = function(){
-    var soChanCuoiCung = 0;
-    for (var i = arrResult.length; i > 0 ; i--) {
+document.getElementById('btnFindFinalPositive').onclick = function(){
+    var finalPositive = 0;
+    console.warn(arrResult.length, arrResult)
+    for (var i = arrResult.length - 1; i > 0 ; i--) {
         var e = arrResult[i];
         if(e % 2 == 0) {
-            soChanCuoiCung = e;
+            finalPositive = e;
             break;
         }
     }
-    document.getElementById('soChanCuoiCung').innerHTML =  soChanCuoiCung;
+    document.getElementById('finalPositive').innerHTML = finalPositive;
 }
 
 // Doi cho 
 
-document.getElementById('btnDoiCho').onclick = function(){
-    var index1 = document.getElementById("nhapSo1").value * 1;
-    var index2 = document.getElementById("nhapSo2").value * 1;
+document.getElementById('btnChangeIndex').onclick = function(){
+    var index1 = document.getElementById("inputIndex1").value * 1;
+    var index2 = document.getElementById("inputIndex2").value * 1;
     var arrDoiCho = arrResult.slice();
-    arrDoiCho[index1] ^= arrDoiCho[index2];
-    arrDoiCho[index2] ^= arrDoiCho[index1];
-    arrDoiCho[index1] ^= arrDoiCho[index2];
-    document.getElementById('doiCho').innerHTML =  arrDoiCho;
+    var checkIndex1 = index1 >= 0 && index1 < arrDoiCho.length;
+    var checkIndex2 = index2 >= 0 && index2 < arrDoiCho.length;
+    if(checkIndex1 && checkIndex2) {
+        arrDoiCho[index1] ^= arrDoiCho[index2];
+        arrDoiCho[index2] ^= arrDoiCho[index1];
+        arrDoiCho[index1] ^= arrDoiCho[index2];
+    } else {
+        arrDoiCho = ["Mot trong hai index da sai"];
+    }
+    document.getElementById('changeIndex').innerHTML =  arrDoiCho;
 }
 
 // Sap xep tang dan
 
-document.getElementById('btnSapXep').onclick = function(){
+document.getElementById('btnSortMinToMax').onclick = function(){
     var arrTangDan = arrResult.slice();
     arrTangDan.sort(function(a, b){
         return a - b;
     });
-    document.getElementById('sapXepTangDan').innerHTML =  arrTangDan;
+    document.getElementById('sortMinToMax').innerHTML =  arrTangDan;
 }
 
 // Tim so nguyen dau tien
 
-document.getElementById('btnTimSoNguyenTo').onclick = function(){
-    var soNguyenToDauTien = 0;
-    for(var i = 1; i < arrResult.length; i++ ) {
-        const e = arrResult[i];
-        if(e < 2) {
-            continue;
-        } else if(e != 2 && e % 2 == 0) {
-            continue;
-        } else {
-            for (let j = 2; j <= Math.sqrt(e); j++) {
-                if(e % j == 0) {
-                    continue;
-                }
-            }
+document.getElementById('btnFindPrimeNum').onclick = function(){
+    var firstPrimeNum = "Khong co so nguyen to";
+    var firstPrimeNum = arrResult.find((num) => {
+        if (num < 2 || (num != 2 && num % 2 == 0)) return false;
+        for (let i = 2; i <= Math.sqrt(num); i++) {
+            if (num % i === 0) return false;
         }
-        soNguyenToDauTien = e;
-        break;
-    } 
-    document.getElementById('timSoNguyenTo').innerHTML =  soNguyenToDauTien == 0 ? "Khong co so nguyen to" : soNguyenToDauTien;
+        return true;
+    });
+    document.getElementById('findFirstPrimeNum').innerHTML = firstPrimeNum;
 }
 
 // Dem so nguyen
 
-document.getElementById("btnThemSo").onclick = function(){
-    var nhapSo = document.getElementById("nhapSoDemSoNguyen").value * 1;
-    console.warn(nhapSo)
-    arrDemSoNguyen.push(nhapSo);
-    document.getElementById('demSoNguyen').innerHTML =  arrDemSoNguyen;
+document.getElementById("btnAddInteger").onclick = function(){
+    var num = document.getElementById("inputArrNum").value * 1;
+    arrCountInteger.push(num);
+    document.getElementById('addArrCountInteger').innerHTML =  arrCountInteger;
 }
 
-document.getElementById('txtDemSoNguyen').onclick = function(){
-    var demSoNguyen = 0;
-    for (var i = 0; i < arrDemSoNguyen.length; i++) {
-        var e = arrDemSoNguyen[i];
-        if(Number.isInteger(e)) {
-           demSoNguyen++;
-        }
-    }
-    document.getElementById('demSoNguyen2').innerHTML =  demSoNguyen;
+document.getElementById('btnCountInteger').onclick = function(){
+    var countInteger = 0;
+    arrCountInteger.forEach(element => {
+        if(Number.isInteger(element)) countInteger++;
+    });
+    document.getElementById('countInteger').innerHTML =  countInteger;
 }
 
 //So sanh so luong am duong 
 
-document.getElementById('txtSoSanh').onclick = function(){
-    var soDuong = 0;
-    var soAm = 0;
-    for (var i = 0; i < arrResult.length; i++) {
-        arrResult[i] > 0 ? soDuong++ : soAm++
-    }
-    var ketQua = "";
-    if(soAm == soDuong) {
-        ketQua = "So am = So duong";
-    } else if( soAm > soDuong) {
-        ketQua = "So am > So duong";
-    } else {
-        ketQua = "So am < So duong";
-    }
-    document.getElementById('soSanhAmDuong').innerHTML =  ketQua;
+document.getElementById('btnCompare').onclick = function(){
+    var countPositiveNum = 0;
+    var countNegativeNum = 0;
+    arrResult.forEach(element => {
+        if(element != 0){
+            element > 0 ? countPositiveNum++ : countNegativeNum++;
+        }
+    });
+    
+    ketQua = countPositiveNum == countNegativeNum ? "So am = So duong" : countPositiveNum > countNegativeNum ? "So am < So duong" : "So am > So duong";
+    document.getElementById('compareNum').innerHTML = ketQua;
 }
 
